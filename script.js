@@ -68,7 +68,8 @@
       // Replace the emoji with an explosion that continues falling
       inner.textContent = '';
       const boom = document.createElement('img');
-      boom.src = 'assets/explosion.gif';
+      // cache-bust: use new filename (explosion-only, no bomb)
+      boom.src = 'assets/explosion_only.gif';
       boom.alt = '💥';
       boom.className = 'boomInline';
 
