@@ -45,9 +45,11 @@
 
     const left = Math.random() * 100;
     const size = 32 + Math.random() * 68; // ~2x bigger
-    const fallDur = 6.0 + Math.random() * 10.5; // different speeds
+    const fallDur = 3.8 + Math.random() * 5.2; // faster falling
     const delay = -Math.random() * fallDur;
-    const swayDur = 2.4 + Math.random() * 3.8;
+    const swayDur = 2.0 + Math.random() * 3.2;
+
+    el.dataset.size = String(size);
 
     el.style.left = `${left}vw`;
     el.style.fontSize = `${size}px`;
@@ -57,52 +59,51 @@
     inner.style.animationDuration = `${swayDur}s`;
     inner.style.animationDelay = `${Math.random() * 1.2}s`;
 
-    function explode(ev){
-      ev.stopPropagation();
-      ev.preventDefault?.();
-      if (el.classList.contains('explode')) return;
-
-      // Haptic (best-effort; not all browsers support)
-      try { if (navigator.vibrate) navigator.vibrate(8); } catch(e) {}
-
-      setScore(score + 1);
-      el.classList.add('explode');
-
-      // Replace the emoji with an explosion that continues falling
-      inner.textContent = '';
-      const boom = document.createElement('img');
-      // cache-bust: use new filename (explosion-only, no bomb)
-      boom.src = 'assets/explosion_only.gif';
-      boom.alt = '💥';
-      boom.className = 'boomInline';
-      boom.decoding = 'async';
-      boom.loading = 'eager';
-      boom.onerror = () => { inner.textContent = '💥'; };
-
-      const s = Math.max(80, Math.min(220, size * 2.1));
-      boom.style.width = s + 'px';
-      boom.style.height = 'auto';
-      inner.appendChild(boom);
-
-      // After a short moment, respawn a new falling item
-      setTimeout(() => {
-        el.remove();
-        spawnFlower();
-      }, 520);
-    }
-
-    // Use pointer/touch to ensure every tap triggers immediately
-    el.addEventListener('pointerdown', explode, {passive:false});
-    el.addEventListener('touchstart', explode, {passive:false});
-
-    // No recycling handler: we let CSS loop. (Reset happens offscreen + fades.)
-
     container.appendChild(el);
   }
 
   // Prevent iOS gesture zoom
   document.addEventListener('gesturestart', (e) => e.preventDefault(), {passive:false});
   document.addEventListener('dblclick', (e) => e.preventDefault(), {passive:false});
+
+  // Delegated tap handler: guarantees explosions for ALL falling items
+  function explodeTulip(el){
+    if (!el || el.classList.contains('explode')) return;
+
+    try { if (navigator.vibrate) navigator.vibrate(8); } catch(e) {}
+    setScore(score + 1);
+    el.classList.add('explode');
+
+    const inner = el.querySelector('.inner');
+    if (!inner) return;
+
+    inner.textContent = '';
+    const boom = document.createElement('img');
+    boom.src = 'assets/explosion_only.gif';
+    boom.alt = '💥';
+    boom.className = 'boomInline';
+    boom.decoding = 'async';
+    boom.loading = 'eager';
+    boom.onerror = () => { inner.textContent = '💥'; };
+
+    const size = Number(el.dataset.size || 60);
+    const s = Math.max(80, Math.min(220, size * 2.1));
+    boom.style.width = s + 'px';
+    boom.style.height = 'auto';
+    inner.appendChild(boom);
+
+    setTimeout(() => {
+      el.remove();
+      spawnFlower();
+    }, 520);
+  }
+
+  container.addEventListener('pointerdown', (ev) => {
+    ev.preventDefault();
+    const t = ev.target;
+    const el = t && t.closest ? t.closest('.tulip') : null;
+    explodeTulip(el);
+  }, {passive:false});
 
   // initial pack
   const initialCount = 30;

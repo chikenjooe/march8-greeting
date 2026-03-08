@@ -52,7 +52,7 @@ body{
   position:fixed;
   inset:0;
   pointer-events:auto;
-  z-index: 1;
+  z-index: 4; /* above card so taps always hit falling items */
   touch-action: none; /* prevent double-tap zoom/pinch in playfield */
 }
 
@@ -77,6 +77,7 @@ body{
   animation-name: swayRotate;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
+  pointer-events:none; /* ensure taps go to .tulip */
 }
 
 .tulip.explode > .inner{
@@ -116,7 +117,7 @@ body{
   display:flex;
   gap:10px;
   align-items:center;
-  z-index: 3;
+  z-index: 6;
 }
 
 .score{
