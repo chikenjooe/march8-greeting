@@ -69,34 +69,50 @@
 
   // Delegated tap handler: guarantees explosions for ALL falling items
   function explodeTulip(el){
-    if (!el || el.classList.contains('explode')) return;
+    if (!el) return;
 
+    // haptics
     try { if (navigator.vibrate) navigator.vibrate(8); } catch(e) {}
+
+    // score
     setScore(score + 1);
-    el.classList.add('explode');
 
-    const inner = el.querySelector('.inner');
-    if (!inner) return;
+    // snapshot current position/size
+    const rect = el.getBoundingClientRect();
+    const size = Number(el.dataset.size || rect.width || 60);
 
-    inner.textContent = '';
+    // remove sticker immediately + respawn
+    el.remove();
+    spawnFlower();
+
+    // explosion fixed in place (does not fall)
     const boom = document.createElement('img');
     boom.src = 'assets/explosion_only.gif';
     boom.alt = '💥';
-    boom.className = 'boomInline';
+    boom.className = 'boomFixed';
     boom.decoding = 'async';
     boom.loading = 'eager';
-    boom.onerror = () => { inner.textContent = '💥'; };
 
-    const size = Number(el.dataset.size || 60);
-    const s = Math.max(80, Math.min(220, size * 2.1));
+    // same visual size as tapped element
+    const s = Math.max(48, Math.min(220, size * 1.05));
     boom.style.width = s + 'px';
     boom.style.height = 'auto';
-    inner.appendChild(boom);
+    boom.style.left = (rect.left + rect.width/2) + 'px';
+    boom.style.top = (rect.top + rect.height/2) + 'px';
 
-    setTimeout(() => {
-      el.remove();
-      spawnFlower();
-    }, 520);
+    boom.onerror = () => {
+      // fallback: quick text pop
+      const t = document.createElement('div');
+      t.className = 'boomText';
+      t.textContent = '💥';
+      t.style.left = boom.style.left;
+      t.style.top = boom.style.top;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 360);
+    };
+
+    document.body.appendChild(boom);
+    setTimeout(() => boom.remove(), 520);
   }
 
   function findTulipTarget(target){

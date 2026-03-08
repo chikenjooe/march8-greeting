@@ -86,11 +86,27 @@ body{
   animation: none !important; /* keep falling smooth; stop sway while exploding */
 }
 
-.boomInline{
-  display:block;
-  pointer-events:none;
+.boomFixed{
+  position: fixed;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: none;
   image-rendering: pixelated;
   filter: drop-shadow(0 10px 14px rgba(0,0,0,0.35));
+}
+
+.boomText{
+  position: fixed;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  font-size: 48px;
+  pointer-events:none;
+  animation: boomText 360ms ease-out forwards;
+}
+
+@keyframes boomText{
+  0%{ opacity: 1; transform: translate(-50%,-50%) scale(0.8); }
+  100%{ opacity: 0; transform: translate(-50%,-70%) scale(1.4); }
 }
 
 /* iOS safe-area padding (prevents weird top/bottom bands behind fixed elements) */
