@@ -51,7 +51,7 @@ body{
 .tulips{
   position:fixed;
   inset:0;
-  pointer-events:auto;
+  pointer-events:none; /* allow taps to pass; each item enables pointer events itself */
   z-index: 1;
   touch-action: none; /* prevent double-tap zoom/pinch in playfield */
 }
@@ -64,6 +64,7 @@ body{
   opacity: 1;
   user-select:none;
   cursor: crosshair;
+  pointer-events: auto;
   will-change: transform, opacity;
   animation-name: fall;
   animation-timing-function: linear;

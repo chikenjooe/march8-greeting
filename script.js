@@ -63,7 +63,7 @@
       if (el.classList.contains('explode')) return;
 
       // Haptic (best-effort; not all browsers support)
-      try { if (navigator.vibrate) navigator.vibrate(20); } catch(e) {}
+      try { if (navigator.vibrate) navigator.vibrate(8); } catch(e) {}
 
       setScore(score + 1);
       el.classList.add('explode');
