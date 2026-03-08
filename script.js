@@ -43,11 +43,9 @@
 
   // Game: click falling flowers to pop them
   const container = document.getElementById('tulips');
-  // Big pool of flower-ish emoji (works across most platforms)
+  // Boss-approved set
   const flowers = [
-    '🌷','🌸','💐','🌹','🌺','🪻','🌻','🌼','🌿','🍀','🌱','🪴',
-    '🥀','🌾','🍃','🍂','🍁','🌵','🎍','🎋','🌲','🌳','🌴',
-    '🪷','🌫️','✨','💖','💕','💘','💝','🎀'
+    '🍾','🍀','🍄','🌹','🌺','🌸','🪻','🌼','🌻','🪷','🌷','🍷','🎁','❤️‍🔥','💖','💝'
   ];
   let score = 0;
 
@@ -84,12 +82,29 @@
     el.addEventListener('click', (ev) => {
       ev.stopPropagation();
       if (el.classList.contains('explode')) return;
+
       setScore(score + 1);
       el.classList.add('explode');
+
+      // Explosion GIF (CC0 from OpenGameArt)
+      const rect = el.getBoundingClientRect();
+      const boom = document.createElement('img');
+      boom.src = 'assets/explosion.gif';
+      boom.className = 'boom';
+      // center explosion on the emoji
+      const s = Math.max(72, Math.min(180, rect.width * 2.2));
+      boom.style.width = s + 'px';
+      boom.style.height = 'auto';
+      boom.style.left = (rect.left + rect.width/2) + 'px';
+      boom.style.top = (rect.top + rect.height/2) + 'px';
+      document.body.appendChild(boom);
+
+      setTimeout(() => boom.remove(), 520);
+
       setTimeout(() => {
         el.remove();
         spawnFlower();
-      }, 420);
+      }, 280);
     });
 
     // When a flower finishes a fall cycle, re-randomize smoothly

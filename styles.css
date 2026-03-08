@@ -75,16 +75,16 @@ body{
 }
 
 .tulip.explode{
-  animation: pop 380ms ease-out forwards;
-}
-.tulip.explode > .inner{
-  animation: none !important;
+  opacity: 0;
 }
 
-@keyframes pop{
-  0%{ transform: scale(1) rotate(0deg); opacity: 1; filter: drop-shadow(0 6px 6px rgba(0,0,0,0.25)); }
-  60%{ transform: scale(1.9) rotate(25deg); opacity: 0.95; filter: drop-shadow(0 14px 16px rgba(0,0,0,0.35)); }
-  100%{ transform: scale(0.2) rotate(60deg); opacity: 0; }
+.boom{
+  position: fixed;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  pointer-events: none;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 10px 14px rgba(0,0,0,0.35));
 }
 
 @keyframes fall{
