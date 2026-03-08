@@ -63,7 +63,8 @@ body{
   will-change: transform;
   animation-name: fall;
   animation-timing-function: linear;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
 
 .tulip > .inner{
@@ -88,7 +89,8 @@ body{
 }
 
 @keyframes fall{
-  to{ transform: translate3d(0, 120vh, 0); }
+  0%{ transform: translate3d(0, -5vh, 0); }
+  100%{ transform: translate3d(0, 120vh, 0); }
 }
 
 @keyframes swayRotate{

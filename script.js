@@ -4,34 +4,13 @@
   const name = rawName.replace(/[<>]/g, '');
 
   const titleEl = document.getElementById('title');
-  const copyBtn = document.getElementById('copy');
-  const openA = document.getElementById('open');
   const scoreEl = document.getElementById('score');
   const toggleBtn = document.getElementById('toggle');
   const card = document.getElementById('card');
 
   titleEl.textContent = name ? `Дорогая, ${name}!` : 'Дорогая!';
 
-  function buildUrlWithName(n){
-    const u = new URL(location.href);
-    u.searchParams.set('name', n);
-    return u.toString();
-  }
-
-  const exampleName = name || 'Катя';
-  openA.href = buildUrlWithName(exampleName);
-
-  copyBtn.addEventListener('click', async () => {
-    const url = buildUrlWithName(exampleName);
-    try {
-      await navigator.clipboard.writeText(url);
-      copyBtn.textContent = 'Скопировано!';
-      setTimeout(() => copyBtn.textContent = 'Скопировать ссылку', 1200);
-    } catch (e) {
-      // Fallback: prompt
-      window.prompt('Скопируй ссылку:', url);
-    }
-  });
+  // (buttons removed) if you need a share link, just append ?name=...
 
   // Hide / reveal поздравление
   let hidden = false;
@@ -107,18 +86,11 @@
       }, 280);
     });
 
-    // When a flower finishes a fall cycle, re-randomize smoothly
-    el.addEventListener('animationiteration', (ev) => {
+    // When a flower reaches the bottom, recycle it (no teleport stutter)
+    el.addEventListener('animationend', (ev) => {
       if (ev.animationName !== 'fall') return;
-      el.style.left = `${Math.random() * 100}vw`;
-      const newFall = 6.0 + Math.random() * 10.5;
-      el.style.animationDuration = `${newFall}s`;
-      const newSize = 16 + Math.random() * 34;
-      el.style.fontSize = `${newSize}px`;
-      inner.textContent = flowers[Math.floor(Math.random() * flowers.length)];
-
-      const newSway = 2.4 + Math.random() * 3.8;
-      inner.style.animationDuration = `${newSway}s`;
+      el.remove();
+      spawnFlower();
     });
 
     container.appendChild(el);
