@@ -71,6 +71,17 @@
     inner.style.animationDuration = `${swayDur}s`;
     inner.style.animationDelay = `${Math.random() * 1.2}s`;
 
+    // Direct handler as backup (some mobiles occasionally miss delegation)
+    el.addEventListener('pointerdown', (ev) => {
+      ev.preventDefault();
+      explodeTulip(el);
+    }, {passive:false});
+
+    el.addEventListener('touchstart', (ev) => {
+      ev.preventDefault();
+      explodeTulip(el);
+    }, {passive:false});
+
     container.appendChild(el);
   }
 

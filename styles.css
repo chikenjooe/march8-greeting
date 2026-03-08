@@ -155,9 +155,13 @@ body{
   border: 1px solid rgba(255,255,255,0.18);
   background: rgba(0,0,0,0.22);
   font-size: 14px;
-  line-height: 1.2;
+  line-height: 1;
   color: rgba(255,255,255,0.92);
   transform-origin: center;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  white-space: nowrap;
 }
 
 .score.pulse{
