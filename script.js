@@ -5,6 +5,7 @@
 
   const titleEl = document.getElementById('title');
   const scoreEl = document.getElementById('score');
+  const scoreBox = document.querySelector('.score');
   const toggleBtn = document.getElementById('toggle');
   const card = document.getElementById('card');
 
@@ -28,15 +29,25 @@
   ];
   let score = 0;
 
+  function bumpScoreUI(){
+    if (!scoreBox) return;
+    scoreBox.classList.remove('pulse','flash');
+    // restart animations
+    void scoreBox.offsetWidth;
+    scoreBox.classList.add('pulse','flash');
+    setTimeout(() => scoreBox.classList.remove('pulse','flash'), 320);
+  }
+
   function setScore(v){
     score = v;
     scoreEl.textContent = String(score);
+    bumpScoreUI();
   }
   setScore(0);
 
   function spawnFlower(){
     const el = document.createElement('div');
-    el.className = 'tulip';
+    el.className = 'tulip pulse';
 
     const inner = document.createElement('span');
     inner.className = 'inner';

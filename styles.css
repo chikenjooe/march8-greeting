@@ -16,7 +16,7 @@ body{
   overscroll-behavior: none;
   -webkit-overflow-scrolling: auto;
   touch-action: manipulation;
-  font-family: "VT323", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: "Press Start 2P", system-ui, sans-serif;
 }
 
 /* Windows-ish wallpaper (SVG-like via gradients) */
@@ -71,6 +71,17 @@ body{
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-fill-mode: both;
+}
+
+.tulip.pulse{
+  animation-name: fall, tulipPulse;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+}
+
+@keyframes tulipPulse{
+  0%,100%{ filter: drop-shadow(0 6px 6px rgba(0,0,0,0.25)); }
+  50%{ filter: drop-shadow(0 10px 12px rgba(0,0,0,0.32)); }
 }
 
 .tulip > .inner{
@@ -143,8 +154,30 @@ body{
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.18);
   background: rgba(0,0,0,0.22);
-  font-size: 22px;
+  font-size: 14px;
+  line-height: 1.2;
   color: rgba(255,255,255,0.92);
+  transform-origin: center;
+}
+
+.score.pulse{
+  animation: scorePulse 220ms ease-out;
+}
+
+.score.flash{
+  animation: scoreFlash 260ms ease-out;
+}
+
+@keyframes scorePulse{
+  0%{ transform: scale(1); }
+  50%{ transform: scale(1.12); }
+  100%{ transform: scale(1); }
+}
+
+@keyframes scoreFlash{
+  0%{ color: rgba(255,255,255,0.92); }
+  35%{ color: #ff3b3b; }
+  100%{ color: rgba(255,255,255,0.92); }
 }
 
 .card{
@@ -189,8 +222,8 @@ h1{
 
 .poem{
   margin: 0 0 16px;
-  font-size: clamp(22px, 3.8vw, 34px);
-  line-height: 1.20;
+  font-size: clamp(12px, 2.2vw, 18px);
+  line-height: 1.55;
   color: rgba(255,255,255,0.92);
 }
 
