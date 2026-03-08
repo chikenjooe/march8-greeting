@@ -1,0 +1,167 @@
+:root{
+  --card-bg: rgba(10, 10, 20, 0.60);
+  --card-border: rgba(255,255,255,0.15);
+  --text: #fff;
+  --muted: rgba(255,255,255,0.75);
+  --accent: #ff4aa2;
+  --accent2: #7cffd1;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  color:var(--text);
+  overflow:hidden;
+  font-family: "VT323", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Windows-ish wallpaper (SVG-like via gradients) */
+.bg{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(1200px 500px at 70% 18%, rgba(255,255,255,0.55), rgba(255,255,255,0.0) 55%),
+    radial-gradient(800px 350px at 18% 22%, rgba(255,255,255,0.35), rgba(255,255,255,0.0) 60%),
+    linear-gradient(#4aa2ff 0%, #86c9ff 45%, #55c76a 46%, #1f7e3a 100%);
+  filter: saturate(1.15);
+}
+
+/* A simple hill highlight to sell the retro wallpaper */
+.bg::after{
+  content:"";
+  position:absolute;
+  left:-10vw;
+  right:-10vw;
+  bottom:-12vh;
+  height:52vh;
+  background:
+    radial-gradient(80% 55% at 35% 55%, rgba(255,255,255,0.22), rgba(255,255,255,0) 60%),
+    radial-gradient(60% 45% at 68% 65%, rgba(255,255,255,0.16), rgba(255,255,255,0) 62%),
+    radial-gradient(140% 120% at 50% 55%, #45c564 0%, #1e7a39 55%, #155b2a 100%);
+  border-top-left-radius: 60% 90%;
+  border-top-right-radius: 55% 85%;
+  transform: rotate(-2deg);
+  opacity: 0.95;
+}
+
+.tulips{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+
+.tulip{
+  position:absolute;
+  top:-12vh;
+  font-size: 26px;
+  filter: drop-shadow(0 6px 6px rgba(0,0,0,0.25));
+  opacity: 0.95;
+  animation-name: fall, sway;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+}
+
+@keyframes fall{
+  to{ transform: translate3d(0, 120vh, 0) rotate(360deg); }
+}
+@keyframes sway{
+  0%,100%{ margin-left: 0; }
+  50%{ margin-left: 24px; }
+}
+
+.card{
+  position:relative;
+  width:min(780px, calc(100vw - 28px));
+  margin: 10vh auto 0;
+  padding: 26px 22px 18px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.35),
+    0 0 0 1px rgba(0,0,0,0.20) inset;
+}
+
+.badge{
+  display:inline-block;
+  font-family: "Press Start 2P", system-ui, sans-serif;
+  font-size: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(255,74,162,0.95), rgba(124,255,209,0.85));
+  color: #120a17;
+  letter-spacing: 0.04em;
+}
+
+h1{
+  margin: 16px 0 12px;
+  font-family: "Press Start 2P", system-ui, sans-serif;
+  font-size: clamp(18px, 3.2vw, 30px);
+  line-height: 1.25;
+  text-shadow: 0 3px 0 rgba(0,0,0,0.35);
+}
+
+.poem{
+  margin: 0 0 16px;
+  font-size: clamp(22px, 3.8vw, 34px);
+  line-height: 1.20;
+  color: rgba(255,255,255,0.92);
+}
+
+.meta{
+  margin: 12px 0 16px;
+  color: var(--muted);
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+  font-size: 22px;
+}
+
+.code{
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px dashed rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.25);
+  color: rgba(255,255,255,0.9);
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  appearance:none;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,74,162,0.18);
+  color: rgba(255,255,255,0.95);
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 22px;
+  font-family: inherit;
+  cursor:pointer;
+  transition: transform .08s ease, background .15s ease;
+  text-decoration:none;
+}
+.btn:hover{ background: rgba(255,74,162,0.28); }
+.btn:active{ transform: translateY(1px); }
+
+.btn-ghost{
+  background: rgba(124,255,209,0.10);
+}
+.btn-ghost:hover{ background: rgba(124,255,209,0.18); }
+
+.footer{
+  margin-top: 14px;
+  font-size: 18px;
+  color: rgba(255,255,255,0.65);
+}
+
+@media (max-height: 740px){
+  body{ overflow:auto; }
+  .card{ margin-top: 6vh; }
+}
