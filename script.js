@@ -60,18 +60,25 @@
   function spawnFlower(){
     const el = document.createElement('div');
     el.className = 'tulip';
-    el.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+
+    const inner = document.createElement('span');
+    inner.className = 'inner';
+    inner.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+    el.appendChild(inner);
 
     const left = Math.random() * 100;
-    const size = 18 + Math.random() * 22;
-    const fallDur = 5.5 + Math.random() * 9.5; // different speeds
+    const size = 16 + Math.random() * 34; // more variety
+    const fallDur = 6.0 + Math.random() * 10.5; // different speeds
     const delay = -Math.random() * fallDur;
-    const swayDur = 1.8 + Math.random() * 3.2;
+    const swayDur = 2.4 + Math.random() * 3.8;
 
     el.style.left = `${left}vw`;
     el.style.fontSize = `${size}px`;
-    el.style.animationDuration = `${fallDur}s, ${swayDur}s`;
-    el.style.animationDelay = `${delay}s, ${Math.random() * 1.2}s`;
+    el.style.animationDuration = `${fallDur}s`;
+    el.style.animationDelay = `${delay}s`;
+
+    inner.style.animationDuration = `${swayDur}s`;
+    inner.style.animationDelay = `${Math.random() * 1.2}s`;
 
     // Click to explode
     el.addEventListener('click', (ev) => {
@@ -79,23 +86,24 @@
       if (el.classList.contains('explode')) return;
       setScore(score + 1);
       el.classList.add('explode');
-      // remove after pop
       setTimeout(() => {
         el.remove();
-        // keep density stable
         spawnFlower();
       }, 420);
     });
 
-    // If animation loops, occasionally refresh so they don't sync
+    // When a flower finishes a fall cycle, re-randomize smoothly
     el.addEventListener('animationiteration', (ev) => {
       if (ev.animationName !== 'fall') return;
-      // randomize a bit on each full fall
       el.style.left = `${Math.random() * 100}vw`;
-      const newFall = 5.5 + Math.random() * 9.5;
-      const newSway = 1.8 + Math.random() * 3.2;
-      el.style.animationDuration = `${newFall}s, ${newSway}s`;
-      el.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+      const newFall = 6.0 + Math.random() * 10.5;
+      el.style.animationDuration = `${newFall}s`;
+      const newSize = 16 + Math.random() * 34;
+      el.style.fontSize = `${newSize}px`;
+      inner.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+
+      const newSway = 2.4 + Math.random() * 3.8;
+      inner.style.animationDuration = `${newSway}s`;
     });
 
     container.appendChild(el);

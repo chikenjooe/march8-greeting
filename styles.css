@@ -60,13 +60,25 @@ body{
   opacity: 0.95;
   user-select:none;
   cursor: crosshair;
-  animation-name: fall, sway;
-  animation-timing-function: linear, ease-in-out;
-  animation-iteration-count: infinite, infinite;
+  will-change: transform;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.tulip > .inner{
+  display:inline-block;
+  will-change: transform;
+  animation-name: swayRotate;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
 }
 
 .tulip.explode{
   animation: pop 380ms ease-out forwards;
+}
+.tulip.explode > .inner{
+  animation: none !important;
 }
 
 @keyframes pop{
@@ -76,11 +88,13 @@ body{
 }
 
 @keyframes fall{
-  to{ transform: translate3d(0, 120vh, 0) rotate(360deg); }
+  to{ transform: translate3d(0, 120vh, 0); }
 }
-@keyframes sway{
-  0%,100%{ margin-left: 0; }
-  50%{ margin-left: 24px; }
+
+@keyframes swayRotate{
+  0%{ transform: translate3d(0,0,0) rotate(-8deg); }
+  50%{ transform: translate3d(22px,0,0) rotate(10deg); }
+  100%{ transform: translate3d(0,0,0) rotate(-8deg); }
 }
 
 .hud{
