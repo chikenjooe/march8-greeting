@@ -43,7 +43,12 @@
 
   // Game: click falling flowers to pop them
   const container = document.getElementById('tulips');
-  const flowers = ['🌷','🌸','💐','🌹','🌺','🪻','🌻'];
+  // Big pool of flower-ish emoji (works across most platforms)
+  const flowers = [
+    '🌷','🌸','💐','🌹','🌺','🪻','🌻','🌼','🌿','🍀','🌱','🪴',
+    '🥀','🌾','🍃','🍂','🍁','🌵','🎍','🎋','🌲','🌳','🌴',
+    '🪷','🌫️','✨','💖','💕','💘','💝','🎀'
+  ];
   let score = 0;
 
   function setScore(v){
