@@ -14,7 +14,12 @@
   <div class="bg" aria-hidden="true"></div>
   <div class="tulips" id="tulips" aria-hidden="true"></div>
 
-  <main class="card" role="main">
+  <div class="hud" aria-hidden="false">
+    <div class="score">Очки: <span id="score">0</span></div>
+    <button id="toggle" class="btn btn-small" type="button">Скрыть поздравление</button>
+  </div>
+
+  <main class="card" role="main" id="card">
     <div class="badge">8&nbsp;МАРТА</div>
     <h1 id="title">Дорогая!</h1>
 
@@ -25,19 +30,10 @@
       А рядом будут радость и цветы.
     </p>
 
-    <div class="meta">
-      <div class="hint">Можно передать имя параметром:</div>
-      <code class="code">?name=Катя</code>
-    </div>
-
     <div class="actions">
-      <button id="copy" class="btn">Скопировать ссылку с именем</button>
+      <button id="copy" class="btn" type="button">Скопировать ссылку</button>
       <a id="open" class="btn btn-ghost" href="#">Открыть пример</a>
     </div>
-
-    <footer class="footer">
-      Сделано специально под Windows‑вайб и падающие тюльпаны.
-    </footer>
   </main>
 
   <script src="script.js"></script>

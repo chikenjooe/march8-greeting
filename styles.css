@@ -48,7 +48,8 @@ body{
 .tulips{
   position:fixed;
   inset:0;
-  pointer-events:none;
+  pointer-events:auto;
+  z-index: 1;
 }
 
 .tulip{
@@ -57,9 +58,21 @@ body{
   font-size: 26px;
   filter: drop-shadow(0 6px 6px rgba(0,0,0,0.25));
   opacity: 0.95;
+  user-select:none;
+  cursor: crosshair;
   animation-name: fall, sway;
   animation-timing-function: linear, ease-in-out;
   animation-iteration-count: infinite, infinite;
+}
+
+.tulip.explode{
+  animation: pop 380ms ease-out forwards;
+}
+
+@keyframes pop{
+  0%{ transform: scale(1) rotate(0deg); opacity: 1; filter: drop-shadow(0 6px 6px rgba(0,0,0,0.25)); }
+  60%{ transform: scale(1.9) rotate(25deg); opacity: 0.95; filter: drop-shadow(0 14px 16px rgba(0,0,0,0.35)); }
+  100%{ transform: scale(0.2) rotate(60deg); opacity: 0; }
 }
 
 @keyframes fall{
@@ -70,8 +83,28 @@ body{
   50%{ margin-left: 24px; }
 }
 
+.hud{
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  z-index: 3;
+}
+
+.score{
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.22);
+  font-size: 22px;
+  color: rgba(255,255,255,0.92);
+}
+
 .card{
   position:relative;
+  z-index: 2;
   width:min(780px, calc(100vw - 28px));
   margin: 10vh auto 0;
   padding: 26px 22px 18px;
@@ -82,6 +115,12 @@ body{
   box-shadow:
     0 20px 60px rgba(0,0,0,0.35),
     0 0 0 1px rgba(0,0,0,0.20) inset;
+}
+
+.card.hidden{
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  pointer-events:none;
 }
 
 .badge{
@@ -146,6 +185,11 @@ h1{
   cursor:pointer;
   transition: transform .08s ease, background .15s ease;
   text-decoration:none;
+}
+
+.btn-small{
+  padding: 10px 12px;
+  font-size: 20px;
 }
 .btn:hover{ background: rgba(255,74,162,0.28); }
 .btn:active{ transform: translateY(1px); }
