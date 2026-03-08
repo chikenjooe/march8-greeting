@@ -74,15 +74,13 @@ body{
   animation-iteration-count: infinite;
 }
 
-.tulip.explode{
-  opacity: 0;
+.tulip.explode > .inner{
+  animation: none !important; /* keep falling smooth; stop sway while exploding */
 }
 
-.boom{
-  position: fixed;
-  transform: translate(-50%, -50%);
-  z-index: 4;
-  pointer-events: none;
+.boomInline{
+  display:block;
+  pointer-events:none;
   image-rendering: pixelated;
   filter: drop-shadow(0 10px 14px rgba(0,0,0,0.35));
 }

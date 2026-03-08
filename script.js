@@ -65,25 +65,24 @@
       setScore(score + 1);
       el.classList.add('explode');
 
-      // Explosion GIF (CC0 from OpenGameArt)
-      const rect = el.getBoundingClientRect();
+      // Replace the emoji with an explosion that continues falling
+      inner.textContent = '';
       const boom = document.createElement('img');
       boom.src = 'assets/explosion.gif';
-      boom.className = 'boom';
-      // center explosion on the emoji
-      const s = Math.max(72, Math.min(180, rect.width * 2.2));
+      boom.alt = '💥';
+      boom.className = 'boomInline';
+
+      const s = Math.max(44, Math.min(120, size * 2.1));
       boom.style.width = s + 'px';
       boom.style.height = 'auto';
-      boom.style.left = (rect.left + rect.width/2) + 'px';
-      boom.style.top = (rect.top + rect.height/2) + 'px';
-      document.body.appendChild(boom);
 
-      setTimeout(() => boom.remove(), 520);
+      inner.appendChild(boom);
 
+      // After a short moment, respawn a new falling item
       setTimeout(() => {
         el.remove();
         spawnFlower();
-      }, 280);
+      }, 520);
     });
 
     // No recycling handler: we let CSS loop. (Reset happens offscreen + fades.)
