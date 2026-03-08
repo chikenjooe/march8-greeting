@@ -72,6 +72,12 @@
       boom.src = 'assets/explosion_only.gif';
       boom.alt = '💥';
       boom.className = 'boomInline';
+      boom.decoding = 'async';
+      boom.loading = 'eager';
+      boom.onerror = () => {
+        // fallback if gif fails to load for any reason
+        inner.textContent = '💥';
+      };
 
       const s = Math.max(44, Math.min(120, size * 2.1));
       boom.style.width = s + 'px';
