@@ -6,6 +6,7 @@
   const titleEl = document.getElementById('title');
   const scoreEl = document.getElementById('score');
   const scoreBox = document.querySelector('.score');
+  const soundBtn = document.getElementById('sound');
   const toggleBtn = document.getElementById('toggle');
   const card = document.getElementById('card');
 
@@ -19,6 +20,85 @@
     hidden = !hidden;
     card.classList.toggle('hidden', hidden);
     toggleBtn.textContent = hidden ? 'Показать поздравление' : 'Скрыть поздравление';
+  });
+
+  // 8-bit "Kalinka" (simple chiptune). Must be started by user gesture.
+  let audioCtx = null;
+  let playing = false;
+  let stopRequested = false;
+
+  // Notes (very simplified motif, loop). 'Kalinka' is public-domain folk melody.
+  const bpm = 132;
+  const beatMs = 60000 / bpm;
+  const seq = [
+    // [midiNote, beats]
+    [69, 1], [71, 1], [72, 2],
+    [72, 1], [71, 1], [69, 2],
+    [67, 1], [69, 1], [71, 2],
+    [71, 1], [69, 1], [67, 2],
+    [64, 2], [67, 2], [69, 4],
+  ];
+
+  function midiToFreq(n){
+    return 440 * Math.pow(2, (n - 69) / 12);
+  }
+
+  function ensureAudio(){
+    if (audioCtx) return audioCtx;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new AC();
+    return audioCtx;
+  }
+
+  async function playLoop(){
+    const ctx = ensureAudio();
+    stopRequested = false;
+    playing = true;
+    soundBtn.textContent = '⏸';
+
+    while (!stopRequested) {
+      for (const [note, beats] of seq) {
+        if (stopRequested) break;
+
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'square';
+        o.frequency.value = midiToFreq(note);
+
+        // envelope
+        const now = ctx.currentTime;
+        const dur = (beats * beatMs) / 1000;
+        g.gain.setValueAtTime(0.0001, now);
+        g.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+        o.connect(g);
+        g.connect(ctx.destination);
+        o.start(now);
+        o.stop(now + dur + 0.02);
+
+        await new Promise(r => setTimeout(r, beats * beatMs));
+      }
+    }
+
+    playing = false;
+    soundBtn.textContent = '♫';
+  }
+
+  function toggleSound(){
+    // Some browsers need resume() on gesture
+    const ctx = ensureAudio();
+    ctx.resume?.();
+    if (!playing) {
+      playLoop();
+    } else {
+      stopRequested = true;
+    }
+  }
+
+  soundBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleSound();
   });
 
   // Game: click falling flowers to pop them
@@ -95,6 +175,11 @@
 
     // haptics
     try { if (navigator.vibrate) navigator.vibrate(8); } catch(e) {}
+
+    // start music on first interaction (autoplay-friendly)
+    if (!playing) {
+      try { toggleSound(); } catch(e) {}
+    }
 
     // score
     setScore(score + 1);
