@@ -108,31 +108,15 @@
     spawnFlower();
 
     // explosion fixed in place (does not fall)
-    const boom = document.createElement('img');
-    // cache-bust per click to force GIF animation restart on mobile browsers
-    boom.src = 'assets/explosion_only.gif?v=' + Date.now();
-    boom.alt = '💥';
+    const boom = document.createElement('div');
     boom.className = 'boomFixed';
-    boom.decoding = 'async';
-    boom.loading = 'eager';
 
     // same visual size as tapped element
     const s = Math.max(48, Math.min(220, size * 1.05));
     boom.style.width = s + 'px';
-    boom.style.height = 'auto';
+    boom.style.height = s + 'px';
     boom.style.left = (rect.left + rect.width/2) + 'px';
     boom.style.top = (rect.top + rect.height/2) + 'px';
-
-    boom.onerror = () => {
-      // fallback: quick text pop
-      const t = document.createElement('div');
-      t.className = 'boomText';
-      t.textContent = '💥';
-      t.style.left = boom.style.left;
-      t.style.top = boom.style.top;
-      document.body.appendChild(t);
-      setTimeout(() => t.remove(), 360);
-    };
 
     document.body.appendChild(boom);
     setTimeout(() => boom.remove(), 520);
@@ -158,9 +142,9 @@
   document.addEventListener('pointerdown', onTap, {capture:true, passive:false});
   document.addEventListener('touchstart', onTap, {capture:true, passive:false});
 
-  // Preload explosion gif to avoid first-tap delay
+  // Preload explosion sprite to avoid first-tap delay
   const preload = new Image();
-  preload.src = 'assets/explosion_only.gif';
+  preload.src = 'assets/explosion-sprite.png';
 
   // initial pack
   const initialCount = 30;
