@@ -86,12 +86,7 @@
       }, 280);
     });
 
-    // When a flower reaches the bottom, recycle it (no teleport stutter)
-    el.addEventListener('animationend', (ev) => {
-      if (ev.animationName !== 'fall') return;
-      el.remove();
-      spawnFlower();
-    });
+    // No recycling handler: we let CSS loop. (Reset happens offscreen + fades.)
 
     container.appendChild(el);
   }
