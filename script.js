@@ -6,7 +6,6 @@
   const titleEl = document.getElementById('title');
   const scoreEl = document.getElementById('score');
   const scoreBox = document.querySelector('.score');
-  const soundBtn = document.getElementById('sound');
   const toggleBtn = document.getElementById('toggle');
   const card = document.getElementById('card');
 
@@ -22,11 +21,10 @@
     toggleBtn.textContent = hidden ? 'Показать поздравление' : 'Скрыть поздравление';
   });
 
-  // 8-bit "Kalinka" (simple chiptune). Must be started by user gesture.
+  // 8-bit "Kalinka" (simple chiptune). Must be started by first user gesture.
   let audioCtx = null;
   let master = null;
-  let playing = false;
-  let stopRequested = false;
+  let started = false;
 
   // Notes (very simplified motif, loop). 'Kalinka' is public-domain folk melody.
   const bpm = 528; // 4x faster
@@ -62,62 +60,43 @@
 
     comp.connect(master);
     master.connect(audioCtx.destination);
-
     audioCtx.__comp = comp;
+
     return audioCtx;
   }
 
-  async function playLoop(){
-    const ctx = ensureAudio();
-    stopRequested = false;
-    playing = true;
-    soundBtn.textContent = '⏸';
+  async function startMusicOnce(){
+    if (started) return;
+    started = true;
 
-    while (!stopRequested) {
-      for (const [note, beats] of seq) {
-        if (stopRequested) break;
-
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.type = 'square';
-        o.frequency.value = midiToFreq(note);
-
-        // envelope
-        const now = ctx.currentTime;
-        const dur = (beats * beatMs) / 1000;
-        g.gain.setValueAtTime(0.0001, now);
-        g.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
-        g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
-
-        o.connect(g);
-        g.connect(ctx.__comp);
-        o.start(now);
-        o.stop(now + dur + 0.02);
-
-        await new Promise(r => setTimeout(r, beats * beatMs));
-      }
-    }
-
-    playing = false;
-    soundBtn.textContent = '♫';
-  }
-
-  async function toggleSound(){
-    // Some browsers need resume() on gesture
     const ctx = ensureAudio();
     try { await ctx.resume?.(); } catch(e) {}
 
-    if (!playing) {
-      playLoop();
-    } else {
-      stopRequested = true;
-    }
-  }
+    // fire-and-forget loop
+    (async () => {
+      while (true) {
+        for (const [note, beats] of seq) {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = 'square';
+          o.frequency.value = midiToFreq(note);
 
-  soundBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    toggleSound();
-  });
+          const now = ctx.currentTime;
+          const dur = (beats * beatMs) / 1000;
+          g.gain.setValueAtTime(0.0001, now);
+          g.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
+          g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+          o.connect(g);
+          g.connect(ctx.__comp);
+          o.start(now);
+          o.stop(now + dur + 0.02);
+
+          await new Promise(r => setTimeout(r, beats * beatMs));
+        }
+      }
+    })();
+  }
 
   // Game: click falling flowers to pop them
   const container = document.getElementById('tulips');
@@ -191,10 +170,11 @@
   function explodeTulip(el){
     if (!el) return;
 
+    // start music on first interaction
+    try { startMusicOnce(); } catch(e) {}
+
     // haptics
     try { if (navigator.vibrate) navigator.vibrate(8); } catch(e) {}
-
-    // music stays user-controlled via the ♫ button (less CPU on phones)
 
     // score
     setScore(score + 1);
