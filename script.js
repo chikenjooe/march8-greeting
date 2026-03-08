@@ -24,6 +24,7 @@
 
   // 8-bit "Kalinka" (simple chiptune). Must be started by user gesture.
   let audioCtx = null;
+  let master = null;
   let playing = false;
   let stopRequested = false;
 
@@ -47,6 +48,22 @@
     if (audioCtx) return audioCtx;
     const AC = window.AudioContext || window.webkitAudioContext;
     audioCtx = new AC();
+
+    // Master chain (louder + consistent across phones)
+    const comp = audioCtx.createDynamicsCompressor();
+    comp.threshold.value = -18;
+    comp.knee.value = 24;
+    comp.ratio.value = 8;
+    comp.attack.value = 0.003;
+    comp.release.value = 0.12;
+
+    master = audioCtx.createGain();
+    master.gain.value = 0.22;
+
+    comp.connect(master);
+    master.connect(audioCtx.destination);
+
+    audioCtx.__comp = comp;
     return audioCtx;
   }
 
@@ -73,7 +90,7 @@
         g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
 
         o.connect(g);
-        g.connect(ctx.destination);
+        g.connect(ctx.__comp);
         o.start(now);
         o.stop(now + dur + 0.02);
 
@@ -85,10 +102,11 @@
     soundBtn.textContent = '♫';
   }
 
-  function toggleSound(){
+  async function toggleSound(){
     // Some browsers need resume() on gesture
     const ctx = ensureAudio();
-    ctx.resume?.();
+    try { await ctx.resume?.(); } catch(e) {}
+
     if (!playing) {
       playLoop();
     } else {
