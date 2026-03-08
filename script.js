@@ -29,7 +29,7 @@
   let stopRequested = false;
 
   // Notes (very simplified motif, loop). 'Kalinka' is public-domain folk melody.
-  const bpm = 132;
+  const bpm = 528; // 4x faster
   const beatMs = 60000 / bpm;
   const seq = [
     // [midiNote, beats]
