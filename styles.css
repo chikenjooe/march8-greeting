@@ -65,6 +65,7 @@ body{
   user-select:none;
   cursor: crosshair;
   pointer-events: auto;
+  padding: 8px; /* bigger hitbox for mobile taps */
   will-change: transform, opacity;
   animation-name: fall;
   animation-timing-function: linear;

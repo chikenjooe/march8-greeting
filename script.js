@@ -99,12 +99,25 @@
     }, 520);
   }
 
-  container.addEventListener('pointerdown', (ev) => {
+  function findTulipTarget(target){
+    let n = target;
+    while (n && n !== container && n !== document.body) {
+      if (n.classList && n.classList.contains('tulip')) return n;
+      n = n.parentNode;
+    }
+    return null;
+  }
+
+  function onTap(ev){
+    const el = findTulipTarget(ev.target);
+    if (!el) return;
     ev.preventDefault();
-    const t = ev.target;
-    const el = t && t.closest ? t.closest('.tulip') : null;
     explodeTulip(el);
-  }, {passive:false});
+  }
+
+  // Capture on document to avoid any propagation/stacking quirks on mobile
+  document.addEventListener('pointerdown', onTap, {capture:true, passive:false});
+  document.addEventListener('touchstart', onTap, {capture:true, passive:false});
 
   // initial pack
   const initialCount = 30;
