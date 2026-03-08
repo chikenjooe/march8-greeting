@@ -44,7 +44,7 @@
     el.appendChild(inner);
 
     const left = Math.random() * 100;
-    const size = 16 + Math.random() * 34; // more variety
+    const size = 32 + Math.random() * 68; // ~2x bigger
     const fallDur = 6.0 + Math.random() * 10.5; // different speeds
     const delay = -Math.random() * fallDur;
     const swayDur = 2.4 + Math.random() * 3.8;
@@ -79,7 +79,7 @@
       boom.loading = 'eager';
       boom.onerror = () => { inner.textContent = '💥'; };
 
-      const s = Math.max(44, Math.min(120, size * 2.1));
+      const s = Math.max(80, Math.min(220, size * 2.1));
       boom.style.width = s + 'px';
       boom.style.height = 'auto';
       inner.appendChild(boom);

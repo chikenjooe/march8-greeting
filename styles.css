@@ -51,7 +51,7 @@ body{
 .tulips{
   position:fixed;
   inset:0;
-  pointer-events:none; /* allow taps to pass; each item enables pointer events itself */
+  pointer-events:auto;
   z-index: 1;
   touch-action: none; /* prevent double-tap zoom/pinch in playfield */
 }
