@@ -57,10 +57,13 @@
     inner.style.animationDuration = `${swayDur}s`;
     inner.style.animationDelay = `${Math.random() * 1.2}s`;
 
-    // Click to explode
-    el.addEventListener('click', (ev) => {
+    function explode(ev){
       ev.stopPropagation();
+      ev.preventDefault?.();
       if (el.classList.contains('explode')) return;
+
+      // Haptic (best-effort; not all browsers support)
+      try { if (navigator.vibrate) navigator.vibrate(20); } catch(e) {}
 
       setScore(score + 1);
       el.classList.add('explode');
@@ -74,15 +77,11 @@
       boom.className = 'boomInline';
       boom.decoding = 'async';
       boom.loading = 'eager';
-      boom.onerror = () => {
-        // fallback if gif fails to load for any reason
-        inner.textContent = '💥';
-      };
+      boom.onerror = () => { inner.textContent = '💥'; };
 
       const s = Math.max(44, Math.min(120, size * 2.1));
       boom.style.width = s + 'px';
       boom.style.height = 'auto';
-
       inner.appendChild(boom);
 
       // After a short moment, respawn a new falling item
@@ -90,12 +89,20 @@
         el.remove();
         spawnFlower();
       }, 520);
-    });
+    }
+
+    // Use pointer/touch to ensure every tap triggers immediately
+    el.addEventListener('pointerdown', explode, {passive:false});
+    el.addEventListener('touchstart', explode, {passive:false});
 
     // No recycling handler: we let CSS loop. (Reset happens offscreen + fades.)
 
     container.appendChild(el);
   }
+
+  // Prevent iOS gesture zoom
+  document.addEventListener('gesturestart', (e) => e.preventDefault(), {passive:false});
+  document.addEventListener('dblclick', (e) => e.preventDefault(), {passive:false});
 
   // initial pack
   const initialCount = 30;

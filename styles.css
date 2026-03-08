@@ -15,6 +15,7 @@ body{
   overflow:hidden;
   overscroll-behavior: none;
   -webkit-overflow-scrolling: auto;
+  touch-action: manipulation;
   font-family: "VT323", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -52,6 +53,7 @@ body{
   inset:0;
   pointer-events:auto;
   z-index: 1;
+  touch-action: none; /* prevent double-tap zoom/pinch in playfield */
 }
 
 .tulip{
