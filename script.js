@@ -153,8 +153,8 @@
     el.appendChild(inner);
 
     const left = Math.random() * 100;
-    const size = 32 + Math.random() * 68; // ~2x bigger
-    const fallDur = 3.8 + Math.random() * 5.2; // faster falling
+    const size = 26 + Math.random() * 44; // big but lighter for phones
+    const fallDur = 4.2 + Math.random() * 4.8; // a bit faster, less CPU
     // Positive delay so items always ENTER from the top (no mid-screen start)
     const delay = Math.random() * 2.2;
     const swayDur = 2.0 + Math.random() * 3.2;
@@ -194,10 +194,7 @@
     // haptics
     try { if (navigator.vibrate) navigator.vibrate(8); } catch(e) {}
 
-    // start music on first interaction (autoplay-friendly)
-    if (!playing) {
-      try { toggleSound(); } catch(e) {}
-    }
+    // music stays user-controlled via the ♫ button (less CPU on phones)
 
     // score
     setScore(score + 1);
@@ -250,6 +247,6 @@
   preload.src = 'assets/explosion-sprite.png';
 
   // initial pack
-  const initialCount = 30;
+  const initialCount = 18;
   for (let i = 0; i < initialCount; i++) spawnFlower();
 })();
