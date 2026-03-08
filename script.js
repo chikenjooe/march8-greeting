@@ -109,7 +109,8 @@
 
     // explosion fixed in place (does not fall)
     const boom = document.createElement('img');
-    boom.src = 'assets/explosion_only.gif';
+    // cache-bust per click to force GIF animation restart on mobile browsers
+    boom.src = 'assets/explosion_only.gif?v=' + Date.now();
     boom.alt = '💥';
     boom.className = 'boomFixed';
     boom.decoding = 'async';
@@ -156,6 +157,10 @@
   // Capture on document to avoid any propagation/stacking quirks on mobile
   document.addEventListener('pointerdown', onTap, {capture:true, passive:false});
   document.addEventListener('touchstart', onTap, {capture:true, passive:false});
+
+  // Preload explosion gif to avoid first-tap delay
+  const preload = new Image();
+  preload.src = 'assets/explosion_only.gif';
 
   // initial pack
   const initialCount = 30;
