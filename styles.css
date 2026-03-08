@@ -69,6 +69,7 @@ body{
   animation-name: fall;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+  animation-fill-mode: both;
 }
 
 .tulip > .inner{
@@ -98,9 +99,9 @@ body{
 }
 
 @keyframes fall{
-  0%{ transform: translate3d(0, -12vh, 0); opacity: 0; }
-  10%{ opacity: 1; }
-  90%{ opacity: 1; }
+  0%{ transform: translate3d(0, -18vh, 0); opacity: 0; }
+  8%{ opacity: 1; }
+  92%{ opacity: 1; }
   100%{ transform: translate3d(0, 120vh, 0); opacity: 0; }
 }
 

@@ -46,7 +46,8 @@
     const left = Math.random() * 100;
     const size = 32 + Math.random() * 68; // ~2x bigger
     const fallDur = 3.8 + Math.random() * 5.2; // faster falling
-    const delay = -Math.random() * fallDur;
+    // Positive delay so items always ENTER from the top (no mid-screen start)
+    const delay = Math.random() * 2.2;
     const swayDur = 2.0 + Math.random() * 3.2;
 
     el.dataset.size = String(size);
